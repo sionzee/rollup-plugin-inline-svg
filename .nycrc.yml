@@ -3,5 +3,6 @@ nyc:
      "src/**"
   ]
   exclude: [
-    "test/**"
+    "test/**",
+    "dist/**"
   ]
