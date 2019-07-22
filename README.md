@@ -1,6 +1,10 @@
 # rollup-plugin-inline-svg
 Adds support for importing svg files with inline mode for Rollup.
 
+[![Build Status](https://travis-ci.org/sionzeecz/rollup-plugin-inline-svg.svg?branch=master)](https://travis-ci.org/sionzeecz/rollup-plugin-inline-svg) 
+[![devDependency Status](https://david-dm.org/sionzeecz/rollup-plugin-inline-svg/dev-status.svg)](https://david-dm.org/sionzeecz/rollup-plugin-inline-svg#info=devDependencies) 
+[![Coverage Status](https://coveralls.io/repos/github/sionzeecz/rollup-plugin-inline-svg/badge.svg?branch=master)](https://coveralls.io/github/sionzeecz/rollup-plugin-inline-svg?branch=master)
+
 ## Installation
 
 ```npm
