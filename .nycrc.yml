@@ -1,8 +1,0 @@
-nyc:
-  include: [
-     "src/**"
-  ]
-  exclude: [
-    "test/**",
-    "dist/**"
-  ]

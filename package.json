@@ -14,6 +14,15 @@
     "test": "ava test/index.js",
     "coverage": "nyc npm test"
   },
+  "ava": {
+    "require": "esm"
+  },
+  "nyc": {
+    "all": true,
+    "check-coverage": true,
+    "exclude": "dist",
+    "include": "src"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sionzeecz/rollup-plugin-inline-svg.git"

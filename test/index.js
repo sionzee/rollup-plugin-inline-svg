@@ -1,5 +1,16 @@
 import test from 'ava';
-import inlineSvg from '../dist/rollup-plugin-inline-svg';
+import inlineSvg from '../src/index';
+import createSvg from "../src/functions/createSvg";
+import placeAttributes from "../src/functions/placeAttributes";
+import extractAttributes from "../src/functions/extractAttributes";
+import hasAttribute from "../src/functions/hasAttribute";
+import hasNode from "../src/functions/hasNode";
+import removeForbiddenNode from "../src/functions/removeForbiddenNode";
+import removeSVGTagAttrs from "../src/functions/removeSVGTagAttrs";
+import removeTagAttrs from "../src/functions/removeTagAttrs";
+import removeTags from "../src/functions/removeTags";
+import validateSvgAttributes from "../src/functions/validateSvgAttributes";
+import validateSvgNodes from "../src/functions/validateSvgNodes";
 
 /**
  * Prepends and appends `` to the string
@@ -31,6 +42,66 @@ test('defaults', (t) => {
   const result = inlineSvg(options);
   t.is(typeof result, 'object');
   t.is(typeof options.removeSVGTagAttrs, "boolean");
+});
+
+test("invalid extension", (t) => {
+  t.is(inlineSvg().transform(null, ".exe"), null);
+});
+
+test("fn: Create Svg", (t) => {
+  t.is(createSvg({test: "test"}), `<svg test="test">`);
+});
+
+test(`fn: Place Attributes`, (t) => {
+  t.is(placeAttributes({test: "test"}), ` test="test"`);
+});
+
+test(`fn: Extract Attributes`, (t) => {
+  t.deepEqual(extractAttributes(`<svg title="hello" id="5">`), {title: "hello", id: "5"});
+});
+
+test(`fn: Has Attribute`, (t) => {
+  t.is(hasAttribute(`<svg test="hello">`, "test"), true);
+  t.is(hasAttribute(`<svg test="hello">`, "nope"), false);
+});
+
+test(`fn: hasNode`, (t) => {
+  t.is(hasNode(`<svg><test></test></svg>`, "test"), true);
+  t.is(hasNode(`<svg><test></test></svg>`, "nope"), false);
+});
+
+test(`fn: Remove Forbidden Nodes`, (t) => {
+  const html = removeForbiddenNode("<svg><title></title></svg>", "title");
+  const result = "<svg></svg>";
+  t.is(html, result);
+});
+
+test(`fn: Remove SVG Tag Attributes`, (t) => {
+  const html = removeSVGTagAttrs("<svg width='10' height='200'></svg>");
+  const result = "<svg ></svg>";
+  t.is(html, result);
+});
+
+test(`fn: Remove Tag Attributes`, (t) => {
+  const html = removeTagAttrs(`<svg test="hey" id="5"></svg>`, ["test"]);
+  const result = `<svg id="5"></svg>`;
+  t.is(html, result);
+});
+
+test(`fn: Remove Tags`, (t) => {
+  const html = removeTags(`<svg><nope></nope></svg>`, ["nope"]);
+  const result = `<svg></svg>`;
+  t.is(html, result);
+});
+
+test(`fn: Validate SVG Attributes`, (t) => {
+  t.deepEqual(validateSvgAttributes("invalid_attributes", "<svg id='5' test='hello'></svg>", ["test"]), ["test"]);
+  t.deepEqual(validateSvgAttributes("invalid_attributes", "<svg id='5' test='hello'></svg>", ["asd"]), []);
+});
+
+test(`fn: Validate SVG Nodes`, (t) => {
+  t.deepEqual(validateSvgNodes("nodes", "<svg><nope></nope><title></title></svg>", ["nope"]), ["nope"]);
+  t.deepEqual(validateSvgNodes("nodes", "<svg><nope></nope><title></title></svg>", ["asd"]), []);
 });
 
 test("Simple svg", (t) => {
