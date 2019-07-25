@@ -1,6 +1,6 @@
 # rollup-plugin-inline-svg changelog
 
-## 1.1.0
+## 1.1.1
 - *warnTags* and *warnTagAttrs* are now called before *removingTags* and *removingTagAttrs*.
 - Filled in missing changelog for 1.1.0.
 
