@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-inline-svg",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Adds support for importing svg files with inline mode for Rollup.",
   "main": "dist/rollup-plugin-inline-svg.js",
   "module": "dist/rollup-plugin-inline-svg.es2015.js",
