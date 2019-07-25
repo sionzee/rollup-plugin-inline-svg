@@ -26,13 +26,13 @@ export default function svgInline(options = {}) {
       if (!extname(id).endsWith(".svg")) return null;
       else {
         let content = code.trim();
-        if (options.removeSVGTagAttrs) content = removeSVGTagAttrs(content);
-        if (options.removingTagAttrs.length > 0) content = removeTagAttrs(content, options.removingTagAttrs);
-        if (options.removeTags) content = removeTags(content, options.removingTags);
         /* istanbul ignore else */
         if (options.warnTagAttrs) validateSvgAttributes(id, content, options.warnTagAttrs);
         /* istanbul ignore else */
         if (options.warnTags) validateSvgNodes(id, content, options.warnTags);
+        if (options.removeSVGTagAttrs) content = removeSVGTagAttrs(content);
+        if (options.removingTagAttrs.length > 0) content = removeTagAttrs(content, options.removingTagAttrs);
+        if (options.removeTags) content = removeTags(content, options.removingTags);
         return {code: `export default \`${content}\``, map: {mappings: ''}};
       }
     }
