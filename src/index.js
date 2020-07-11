@@ -33,7 +33,7 @@ export default function svgInline(options = {}) {
         if (options.removeSVGTagAttrs) content = removeSVGTagAttrs(content);
         if (options.removingTagAttrs.length > 0) content = removeTagAttrs(content, options.removingTagAttrs);
         if (options.removeTags) content = removeTags(content, options.removingTags);
-        return {code: `export default \`${content}\``, map: {mappings: ''}};
+        return {code: `export default '${content. replace(/(\r\n|\n|\r)/gm,"")}'`, map: {mappings: ''}};
       }
     }
   };

@@ -16,7 +16,7 @@ import validateSvgNodes from "../src/functions/validateSvgNodes";
  * Prepends and appends `` to the string
  */
 function appendQuotes(string) {
-  return `\`${string}\``;
+  return `'${string}'`;
 }
 
 const TEST_SVG1 = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"></svg>`;
