@@ -1,8 +1,7 @@
 # rollup-plugin-inline-svg
-Adds support for importing svg files with inline mode for Rollup.
+Plugin for Rollup what transforms svg files into string on import. 
 
 [![Build Status](https://travis-ci.org/sionzeecz/rollup-plugin-inline-svg.svg?branch=master)](https://travis-ci.org/sionzeecz/rollup-plugin-inline-svg) 
-[![devDependency Status](https://david-dm.org/sionzeecz/rollup-plugin-inline-svg/dev-status.svg)](https://david-dm.org/sionzeecz/rollup-plugin-inline-svg#info=devDependencies) 
 [![Coverage Status](https://coveralls.io/repos/github/sionzeecz/rollup-plugin-inline-svg/badge.svg?branch=master)](https://coveralls.io/github/sionzeecz/rollup-plugin-inline-svg?branch=master)
 
 ## Installation
@@ -15,7 +14,7 @@ OR
 yarn add --dev rollup-plugin-inline-svg
 ```
 
-## Usage
+## Configuration
 ```javascript
 // rollup.config.js
 import inlineSvg from 'rollup-plugin-inline-svg';
@@ -53,15 +52,17 @@ export default {
 }
 ```
 
-You can use svg files in your bundle now. Example:
+## Usage
 ```javascript
-  import svgIcon from "path-to-icons/checkbox.svg"
-  document.getElementById("test").innerHTML = svgIcon; // svgIcon is "<svg...>...</svg>"
+  import svg from "...test.svg"
+
+  document.getElementById("test").innerHTML = svg; // svg = "<svg...>...</svg>"
 ```
 
 >Note: Do not forget to append .svg extension or it will try to resolve with .js (or use plugin for resolving extensions)
 
-I'm trying to make this plugin similar to [svg-inline-loader](https://webpack.js.org/loaders/svg-inline-loader/) to make easier migration from webpack. Anyway I'm not using ways like webpack does it.
+This plugin is inspired by [svg-inline-loader](https://webpack.js.org/loaders/svg-inline-loader/) for webpack. 
+I'm trying to make this plugin similar to the webpack one to make easier migration from webpack.
 
 ## License
 MIT, see `LICENSE` for more information.
