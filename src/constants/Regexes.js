@@ -4,6 +4,7 @@ export default {
   SVG_ATTRS: /(<svg[\w\W]+?>)/,
   WIDTH_ATTR: /<svg[\w\W]+?(width=["'][\w\W]+?["']\s?)[\w\W]+?>/,
   HEIGHT_ATTR: /<svg[\w\W]+?(height=["'][\w\W]+?["']\s?)[\w\W]+?>/m,
+  MULTILINES: /(\r\n|\n|\r)/gm,
 
   /**
    * Creates regex for attr match

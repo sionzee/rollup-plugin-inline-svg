@@ -5,9 +5,10 @@ import removeTagAttrs from "./functions/removeTagAttrs";
 import removeTags from "./functions/removeTags";
 import validateSvgAttributes from "./functions/validateSvgAttributes";
 import validateSvgNodes from "./functions/validateSvgNodes";
+import inlineNode from "./functions/inlineNode";
+import escapeQuotes from "./functions/escapeQuotes";
 
 /**
- *
  * @param {{removeSVGTagAttrs: boolean, removeTags: boolean, removingTags: Array.<string>, warnTags: Array.<string>, warnTagAttrs: Array.<string>, removingTagAttrs: Array.<string>}} options
  * @return {{transform(*, *=): (null|*), name: string}|null|{code: string, map: {mappings: string}}}
  */
@@ -33,7 +34,7 @@ export default function svgInline(options = {}) {
         if (options.removeSVGTagAttrs) content = removeSVGTagAttrs(content);
         if (options.removingTagAttrs.length > 0) content = removeTagAttrs(content, options.removingTagAttrs);
         if (options.removeTags) content = removeTags(content, options.removingTags);
-        return {code: `export default '${content. replace(/(\r\n|\n|\r)/gm,"")}'`, map: {mappings: ''}};
+        return {code: `export default '${escapeQuotes(inlineNode(content))}'`, map: {mappings: ''}};
       }
     }
   };
