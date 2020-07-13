@@ -8,9 +8,20 @@ export default
  */
 function extractAttributes(html) {
   const attributes = Object.create(null);
-  let match;
-  while ((match = Regexes.ATTRS.exec(html)) != null) {
-    attributes[match[1]] = match[2];
+
+  const tempHtml = html
+    .replace(Regexes.ESCAPE_SINGLE_QUOTE, "$ESCP_S_Q$")
+    .replace(Regexes.ESCAPE_MULTI_QUOTE, "$ESCP_M_Q$");
+
+  for (const match of tempHtml.matchAll(Regexes.ATTRS_SINGLE)) {
+    attributes[match[1]] = match[2]
+      .replace(/\$ESCP_S_Q\$/gm, "\\'");
   }
+
+  for (const match of tempHtml.matchAll(Regexes.ATTRS_MULTI)) {
+    attributes[match[1]] = match[2]
+      .replace(/\$ESCP_M_Q\$/gm, '\\"');
+  }
+
   return attributes;
 }
