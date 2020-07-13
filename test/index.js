@@ -24,6 +24,8 @@ const TEST_SVG1_RES = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xml
 
 const TEST_SVG_FORBIDDEN_NODES = `<svg><title>Test Name</title><path>test<style>Or Style</style></path><desc>Description?</desc></svg>`;
 const TEST_SVG_FORBIDDEN_NODES_RES = `<svg><path>test</path></svg>`;
+const TEST_SVG_SINGLE_QUOTES = `<svg test='ya'></svg>`;
+const TEST_SVG_MIXED_QUOTES = `<svg test='y"a'></svg>`;
 
 const TEST_SVG_FORBIDDEN_ATTRS = `<svg test="hello" version="1.1" id="nope"></svg>`;
 const TEST_SVG_FORBIDDEN_ATTRS_RES = `<svg version="1.1"></svg>`;
@@ -148,8 +150,22 @@ test("Warn about forbidden attributes", (t) => {
 test("Warn about forbidden tags", (t) => {
   spyWarn(message => {
     t.is(message, "rollup-plugin-inline-svg: file forbidden_nodes.svg has forbidden nodes: style, title");
-
   });
   inlineSvg({warnTags: ["style", "title"]}).transform(TEST_SVG_FORBIDDEN_NODES, "forbidden_nodes.svg");
   releaseWarn();
+});
+
+test("Escape single quotes on export", (t) => {
+  const result = inlineSvg().transform(TEST_SVG_SINGLE_QUOTES, "single_quotes.svg");
+  t.is(result.code, `export default '<svg test=\\'ya\\'></svg>'`);
+});
+
+test("Detect correct opening/closing tags", (t) => {
+  const result = inlineSvg({removingTagAttrs: ["test"]}).transform(TEST_SVG_MIXED_QUOTES, "mixed_quotes.svg");
+  t.is(result.code, `export default '<svg></svg>'`); // tag is removed if is successfully matched
+});
+
+test("Determine correct opening/closing tags", (t) => {
+  const result = inlineSvg().transform(TEST_SVG_MIXED_QUOTES, "mixed_quotes.svg");
+  t.is(result.code, `export default '<svg test=\\'y"a\\'></svg>'`);
 });
