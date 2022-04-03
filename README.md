@@ -1,68 +1,71 @@
 # rollup-plugin-inline-svg
-Plugin for Rollup what transforms svg files into string on import. 
+A rollup plugin for inlining svg files
 
 [![Build Status](https://travis-ci.org/sionzeecz/rollup-plugin-inline-svg.svg?branch=master)](https://travis-ci.org/sionzeecz/rollup-plugin-inline-svg) 
 [![Coverage Status](https://coveralls.io/repos/github/sionzeecz/rollup-plugin-inline-svg/badge.svg?branch=master)](https://coveralls.io/github/sionzeecz/rollup-plugin-inline-svg?branch=master)
 
+## Features
+- Checking validity of SVG files
+- Filtering out attributes and tags with unwrap or delete action
+- Traversing AST of SVG files
+- Zero configuration config
+
 ## Installation
 
-```npm
+```bash
+pnpm install --save-dev rollup-plugin-inline-svg
 npm install --save-dev rollup-plugin-inline-svg
-```
-OR
-```npm
 yarn add --dev rollup-plugin-inline-svg
 ```
 
 ## Configuration
+In your `rollup.config.js` file
 ```javascript
-// rollup.config.js
-import inlineSvg from 'rollup-plugin-inline-svg';
+import InlineSvg from 'rollup-plugin-inline-svg';
 
 export default {
-  input: "src/input.js",
-  output: "dist/output.js",
-  plugins: [
-    inlineSvg({
-      // Removes specified tags and its children. You can specify tags by setting removingTags query array.
-      // default: false
-      removeTags: false,
-  
-      // warning: this won't work unless you specify removeTags: true
-      // default: ['title', 'desc', 'defs', 'style']
-      removingTags: ['title', 'desc', 'defs', 'style'],
-     
-      // warns about present tags, ex: ['desc', 'defs', 'style']
-      // default: []
-      warnTags: [], 
+  // Omitted Fields
+  plugins: [InlineSvg()],
+}
+```
+or more advanced configuration
+```javascript
 
-      // Removes `width` and `height` attributes from <svg>.
-      // default: true
-      removeSVGTagAttrs: true,
-  
-      // Removes attributes from inside the <svg>.
-      // default: []
-      removingTagAttrs: [],
-  
-      // Warns to console about attributes from inside the <svg>.
-      // default: []
-      warnTagAttrs: []
+import InlineSvg, {markAsRemoved} from 'rollup-plugin-inline-svg';
+
+export default {
+  // Omitted Fields
+  plugins: [
+    InlineSvg({
+      forbidden: {
+        tags: ['div', 'style:remove'],
+        attrs: ['width', 'height'],
+      },
+      include: ['src/**/*.ts'],
+      exclude: ['*.spec.ts'],
+      traverse: (node: AstNode) => {
+        if(node?.name === 'div' && node?.attrs?.['id'] !== undefined) {
+          // remove all divs with id attributes
+          markAsRemoved(node) // or markAsUnwrapped
+        }
+      },
     })
   ],
 }
 ```
 
-## Usage
-```javascript
-  import svg from "...test.svg"
+> Note: You can read about the options in CHANGELOG.md
 
-  document.getElementById("test").innerHTML = svg; // svg = "<svg...>...</svg>"
+## Usage
+```typescript
+import UserIcon from "@icons/user.svg"
+
+document.querySelectorAll(`.icon.user`).forEach((node) => {
+  node.innerHTML = UserIcon;
+})
 ```
 
->Note: Do not forget to append .svg extension or it will try to resolve with .js (or use plugin for resolving extensions)
-
-This plugin is inspired by [svg-inline-loader](https://webpack.js.org/loaders/svg-inline-loader/) for webpack. 
-I'm trying to make this plugin similar to the webpack one to make easier migration from webpack.
+> Note: If you are not using custom module resolution, you should append .svg to import path.
 
 ## License
 MIT, see `LICENSE` for more information.

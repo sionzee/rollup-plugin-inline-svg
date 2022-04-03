@@ -1,5 +1,87 @@
 # rollup-plugin-inline-svg changelog
 
+## 3.0.0
+
+Since the rollup-plugin-inline-svg is used in more projects than I expected, I have decided to overhaul the plugin and deal with existing issues.
+
+Summary of changes:
+- replaced all regexes with AST transformations, there were a scenarios where the regexes could fail.
+- replacing attribute quotes for double quote (")
+- detection for invalid svg files (throws an error)
+
+### Configuration
+
+#### Added `traverse`
+A function what calls a callback argument on each child of ast including the root node
+
+Example: 
+```javascript
+{
+  traverse: node => {
+    if(node?.name === 'defs') {
+      node.name = "style"
+    }
+    
+    if(node?.attrs?.width) {
+      node.attrs.width = '32px'
+    }
+  }
+}
+```
+
+#### Added `include` and `exclude`
+What files will be included in the transformation
+
+A valid `picomatch` glob pattern, or array of patterns.
+
+```
+// ReadonlyArray<string | RegExp> | string | RegExp | null;
+{
+  include: ['*.ts'],
+  exclude: ['*.spec.ts']
+}
+```
+
+Defaults to: `include: ['*.svg']`
+
+#### Replaced `removingTags` and `removeTags` with `forbidden.tags`
+before:
+```javascript
+{
+  removeTags: true, 
+  removingTags: ['defs', 'style']
+}
+```
+now:
+```javascript
+{
+  forbidden: {
+    tags: ['defs', 'style:remove']
+  }
+}
+```
+
+> Note: The tags are unwrapped by default unless you append `:remove` to tag name.
+
+#### Replaced `removingTagAttrs` with `forbidden.attrs`
+before:
+```javascript
+{
+  removingTagAttrs: ['title', 'width', 'height']
+}
+```
+now:
+```javascript
+{
+  forbidden: {
+    attrs: ['title', 'width', 'height']
+  }
+}
+```
+
+#### Dropped `warnTags`, `removeSVGTagAttrs` and `warnTagAttrs`
+You are able to replicate the old behaviour by using traverse option.
+
 ## 2.0.0
 ####  Added support for Rollup 2 and backward compatibility for v1
 This plugin is already used within many Rollup 1 projects and there it no replacement now.\
