@@ -15,7 +15,7 @@ export default function InlineSvg(options: InlineSvgOptions = {}) {
 
     transform(code: string, id: string) {
       if(!filter(id)) return;
-      return {code: `export default '${SvgProcessor.process(code, {...options, fileName: id})}'`, map: {mappings: ''}};
+      return {code: `export default '${SvgProcessor.process(code, {...options, fileName: id}).replace(/\n/g, '')}'`, map: {mappings: ''}};
     },
   };
 }
