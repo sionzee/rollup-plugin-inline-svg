@@ -1,5 +1,8 @@
 # rollup-plugin-inline-svg changelog
 
+## 3.0.1
+Fixed default value of `include` to `['**/*.svg']`
+
 ## 3.0.0
 
 Since the rollup-plugin-inline-svg is used in more projects than I expected, I have decided to overhaul the plugin and deal with existing issues.
@@ -42,7 +45,7 @@ A valid `picomatch` glob pattern, or array of patterns.
 }
 ```
 
-Defaults to: `include: ['*.svg']`
+Defaults to: `include: ['*.js', '*.js']`, which is wrong and is fixed on 3.0.1
 
 #### Replaced `removingTags` and `removeTags` with `forbidden.tags`
 before:

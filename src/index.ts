@@ -3,7 +3,7 @@ import {InlineSvgOptions} from "./inlineSvgOptions";
 import {SvgProcessor} from "./svg-processor";
 
 const defaultOptions: InlineSvgOptions = {
-  include: ['*.ts', '*.js']
+  include: ['**/*.svg']
 }
 
 export default function InlineSvg(options: InlineSvgOptions = {}) {
