@@ -41,8 +41,7 @@ export default {
         tags: ['div', 'style:remove'],
         attrs: ['width', 'height'],
       },
-      include: ['src/**/*.ts'],
-      exclude: ['*.spec.ts'],
+      include: ['src/**/*.svg'],
       traverse: (node: AstNode) => {
         if(node?.name === 'div' && node?.attrs?.['id'] !== undefined) {
           // remove all divs with id attributes
