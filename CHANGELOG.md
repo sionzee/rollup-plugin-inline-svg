@@ -2,6 +2,7 @@
 
 ## 3.0.1
 Fixed default value of `include` to `['**/*.svg']`
+Fixed parsing SVG files with non-root SVG nodes.
 
 ## 3.0.0
 

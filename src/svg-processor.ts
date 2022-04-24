@@ -15,6 +15,20 @@ export const markAsRemoved = (node: AstNode) => {
   node.children = []
 }
 
+export const findSvgNode = (node: AstNode): AstNode | null => {
+  let svgAst: AstNode | null = null
+  SvgProcessor.traverse(node, node => {
+    const name = node.name?.toLowerCase() ?? ''
+    if(name === 'svg') {
+      svgAst = node;
+      return true
+    }
+
+    return false
+  })
+  return svgAst
+}
+
 export class SvgProcessor {
 
   static process(code: string, options: ProcessingOptions): string {
@@ -24,9 +38,10 @@ export class SvgProcessor {
       throw new Error(`rollup-plugin-inline-svg: file ${options.fileName} contains more than one root element`)
     }
 
-    const ast = asts.pop()!
-    if(ast.name?.toLowerCase() !== "svg") {
-      throw new Error(`rollup-plugin-inline-svg: file ${options.fileName} is not a valid svg. The root element is not a svg tag.`)
+    const ast = asts.find(node => findSvgNode(node) !== null)
+
+    if(ast == null) {
+      throw new Error(`rollup-plugin-inline-svg: file ${options.fileName} is not a valid svg. The 'svg' node was not found.`)
     }
 
     const requiresTraverse = options.forbidden !== undefined || options.traverse !== undefined
@@ -51,15 +66,14 @@ export class SvgProcessor {
       });
     }
 
-    let transformedCode = stringify([ast] as IDoc[])
+    let transformedCode = stringify(asts as IDoc[])
     if(requiresTraverse) {
       transformedCode = transformedCode.replace(/<\/?element-marked-to-remove>/g, '')
     }
     return transformedCode
   }
 
-  static traverse(node: AstNode, callbackFn: (node: AstNode) => void): void {
-    callbackFn(node);
-    if(node.children) node.children.forEach(child => this.traverse(child, callbackFn))
+  static traverse(node: AstNode, callbackFn: (node: AstNode) => boolean | void): void {
+    if(!callbackFn(node) && node.children) node.children.forEach(child => this.traverse(child, callbackFn))
   }
 }
