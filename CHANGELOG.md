@@ -1,5 +1,8 @@
 # rollup-plugin-inline-svg changelog
 
+## 3.0.2
+Changes from 3.0.1 were not built.
+
 ## 3.0.1
 Fixed default value of `include` to `['**/*.svg']`
 Fixed parsing SVG files with non-root SVG nodes.
