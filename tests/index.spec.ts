@@ -9,13 +9,6 @@ describe('InlineSvg', () => {
     ).toThrowError('rollup-plugin-inline-svg: file test.svg is not a valid svg. The \'svg\' node was not found.')
   });
 
-  it(`multiple roots`, () => {
-    const html = `<svg>Title here</svg><svg>Title here</svg>`
-    expect(
-      () => SvgProcessor.process(html, {fileName: 'test.svg'})
-    ).toThrowError('rollup-plugin-inline-svg: file test.svg contains more than one root element')
-  });
-
   it(`not tag`, () => {
     const html = ``
     expect(
@@ -73,6 +66,21 @@ describe('InlineSvg', () => {
     <path d="truncated" />
 </svg>`
     SvgProcessor.process(svg, {fileName: 'test.svg'})
+    // process shouldn't throw an error
+  })
+
+  it('svg with comment', () => {
+    const svg = `<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.2.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"</svg>`
+    SvgProcessor.process(svg, {fileName: 'test.svg'})
+    // process shouldn't throw an error
+  })
+
+  it('leave the svg content the same', () => {
+    const svg = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-axis-arrow-info" width="24" height="24" viewBox="0 0 24 24"></svg>`
+    expect(SvgProcessor.process(svg, {fileName: 'test.svg'}))
+      .toEqual(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-axis-arrow-info" width="24" height="24" viewBox="0 0 24 24"></svg>`)
     // process shouldn't throw an error
   })
 })

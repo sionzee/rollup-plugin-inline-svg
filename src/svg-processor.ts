@@ -29,24 +29,27 @@ export const findSvgNode = (node: AstNode): AstNode | null => {
   return svgAst
 }
 
+export const findSvgNodeInArray = (nodes: AstNode[]): AstNode | null => {
+  for(const node of nodes) {
+    const ast = findSvgNode(node)
+    if(ast) return ast
+  }
+  return null
+}
+
 export class SvgProcessor {
 
   static process(code: string, options: ProcessingOptions): string {
-    const asts = parse(code.trim()) as AstNode[]
+    const ast = parse(code.trim()) as AstNode[]
+    const svgAst = findSvgNodeInArray(ast)
 
-    if(asts.length > 1) {
-      throw new Error(`rollup-plugin-inline-svg: file ${options.fileName} contains more than one root element`)
-    }
-
-    const ast = asts.find(node => findSvgNode(node) !== null)
-
-    if(ast == null) {
+    if(svgAst == null) {
       throw new Error(`rollup-plugin-inline-svg: file ${options.fileName} is not a valid svg. The 'svg' node was not found.`)
     }
 
     const requiresTraverse = options.forbidden !== undefined || options.traverse !== undefined
     if(requiresTraverse) {
-      SvgProcessor.traverse(ast, node => {
+      SvgProcessor.traverse(svgAst, node => {
         if(options?.forbidden?.attrs !== undefined && node.attrs !== undefined) {
           Object.keys(node.attrs).forEach(attrName => {
             if(options.forbidden!.attrs!.indexOf(attrName) >= 0)
@@ -66,7 +69,7 @@ export class SvgProcessor {
       });
     }
 
-    let transformedCode = stringify(asts as IDoc[])
+    let transformedCode = stringify([svgAst] as IDoc[])
     if(requiresTraverse) {
       transformedCode = transformedCode.replace(/<\/?element-marked-to-remove>/g, '')
     }

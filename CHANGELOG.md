@@ -1,12 +1,14 @@
 # rollup-plugin-inline-svg changelog
+## 3.0.3
+Transformed code is returning just `<svg>` tag now. The DOCTYPE or XML comment is not necessary for inlined SVG.
 
 ## 3.0.2
 Changes from 3.0.1 were not built.
 
 ## 3.0.1
-Fixed default value of `include` to `['**/*.svg']`
-Fixed parsing SVG files with non-root SVG nodes.
-Strip newlines from the transformed ast
+- Fixed default value of `include` to `['**/*.svg']`
+- Fixed parsing SVG files with non-root SVG nodes.
+- Strip newlines from the transformed ast
 
 ## 3.0.0
 
